@@ -1,0 +1,136 @@
+---
+framework: bootstrap
+output: html_document
+highlighter: prettify
+hitheme: twitter-bootstrap
+mode: selfcontained
+github:
+branch: gh-pages
+user: RohitDhankar
+---
+
+<h1 style = "font-size: 72px;line-height: 72px;color: #0b62a4;margin: 20px 0 20px 0;text-shadow: 1px 1px 5px #789;"> Rohit <a href = "https://github.com/RohitDhankar"> GitHub</a>
+<br/>
+Statistical Quality Control (SQC) using "R"
+<br/>
+</h1>
+
+<p>
+
+<br/>
+1. 99.73% observations to be between +(-)3 Sigma / Six Sigma . 
+<br/>
+2. Control Charts - UCL , Central Line and LCL , leads to outlier or Special cause detection.
+<br/>
+3. Using package - "qcc" to create a Control Chart within "R"
+<br/>
+4. Multivariate Control Charts - Control Ellipsoid - http://arxiv.org/ftp/arxiv/papers/0901/0901.2880.pdf
+<br/>
+
+Copyright is of the Authors
+Authors:  Edgar Santos-Fernández, Michele Scagliarini -- https://sites.google.com/site/edgarsantosfernandez/home
+</P>
+
+```{r results='asis', error=F, warning=F, message=F, tidy = F}
+
+library(MSQC)
+library("MSQC", lib.loc="~/R/win-library/3.1")
+data(package="MSQC")
+library(qcc)
+citation("qcc")
+#Scrucca, L. (2004). qcc: an R package for quality control
+#charting and statistical process control. R News 4/1, 11-17.
+set.seed(20)
+
+x <-round(rnorm(120,20,2),2)
+length <-matrix(x, ncol=4, byrow=TRUE)
+par(mfrow=c(1,2))
+qcc(length, type="xbar", std.dev="RMSDF"); qcc(length, type="R")
+#
+cap<-qcc(length, type="xbar", nsigmas=3, plot=T)
+process.capability(cap, spec.limits=c(14,26))
+#
+
+mu <-c(0,0) # The Mean vector - "mu" of a Bivariate Normal Distribution 
+sigma <- matrix(c(10,3,3,6),2,2) # Sigma the Covariance Matrix 
+# The Square Covariance Matrix structure needs to be seen and understood ... 
+sigma
+#
+sigma[1,1]
+# Which is the Observation "10" t location - Row - 1 and Column -1, within the Square Matrix "sigma"
+sigma[2,2]
+# Which is the Observation "6" at location - Row - 2 and Column -2 , within the Square Matrix "sigma"
+#
+rho <- sigma[1,2]/(sqrt(sigma[1,1]*sigma[2,2])) 
+rho
+# rho=3/(sqrt(10*6))
+# dummy<-3/sqrt(60) - same as value of "rho"
+# https://stat.ethz.ch/R-manual/R-devel/library/stats/html/cor.html
+#
+var1<-seq(-12,12,.7)
+var1
+#
+var2<-var1
+knitr::kable(var2)
+```
+
+```{r,results='asis',echo=FALSE}
+
+```
+
+
+```{r results='asis', error=F, warning=F, message=F, tidy = F}
+# 
+f<-matrix(0, length(var1), length(var1))
+for(i in 1:length(var1))
+  {
+for(j in 1:length(var1))
+  {
+  f[i,j]<-1/(2*pi*sqrt(sigma[1,1]*sigma[2,2]*(1-rho^2)))*exp(-1/(2*(1-rho^2)) * ((var1[i]-mu[1])^2/sigma[1,1] + (var2[j] - mu[2])^2/sigma[2,2]-2 *rho*((var1[i] - mu[1])*(var2[j]-mu[2]))/(sqrt(sigma[1,1])*sqrt(sigma[2,2]))))}}    
+
+# 
+str(f)
+#
+persp(var1,var2,f,xlab="Var-1",ylab="Var-2",zlab="f(var1,var2)", 
+      theta=30,phi=30,col = "red",shade = 0.05,r=50,d=0.02,expand=0.9,ltheta=90,lphi=180, nticks=4,box=F)
+#
+jet.colors <- colorRampPalette( c("blue", "green") )
+#
+nbcol <- 100
+color <- jet.colors(nbcol)
+persp(var1,var2,f,xlab="Var-1",ylab="Var-2",zlab="f(var1,var2)", 
+      theta=30,phi=30,col = color,shade = 0.05,r=50,d=0.02,expand=0.9,ltheta=90,lphi=180, nticks=4,box=T)
+# Further Shading - using Code from help -persp {graphics}
+z <- outer(var1, var2, function(a, b) a*b^2)
+nrz <- nrow(z)
+ncz <- ncol(z)
+# Compute the z-value at the facet centres
+zfacet <- z[-1, -1] + z[-1, -ncz] + z[-nrz, -1] + z[-nrz, -ncz]
+# Recode facet z-values into color indices
+facetcol <- cut(zfacet, nbcol)
+
+persp(var1,var2,f,xlab="Var-1",ylab="Var-2",zlab="f(var1,var2)", 
+      theta=30,phi=30,col = color[facetcol],shade = 0.05,r=50,d=0.02,expand=0.9,ltheta=90,lphi=180, nticks=4,box=F)
+# In the Above seen Perspective Plot - persp {graphics}
+# f == the matrix containing values to be plotted.
+
+```
+
+```{r,results='asis',echo=FALSE}
+# R Graphs 
+
+```
+
+<br/>
+## Contact...
+- [ email](https://github.com/RohitDhankar)
+- [ Github ](https://github.com/RohitDhankar)
+- [ LinkedIn ](https://www.linkedin.com/in/rohitdhankar )
+- [ Twitter  ](https://twitter.com/DhankarRohit)
+
+<br/>
+## License - GPL - No Copyright (http://www.gnu.org/licenses/licenses.en.html#GPL)
+```
+
+```
+[ Rohit Dhankar 2015](https://github.com/RohitDhankar)
