@@ -1,0 +1,165 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Statistical-quality-control-sqc-using-r by RohitDhankar</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/github-light.css">
+    <meta name="viewport" content="width=device-width">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Statistical-quality-control-sqc-using-r</h1>
+        <p>Statistical Quality Control (SQC) using &quot;R&quot;</p>
+
+        <p class="view"><a href="https://github.com/RohitDhankar/Statistical-Quality-Control-SQC-using-R-">View the Project on GitHub <small>RohitDhankar/Statistical-Quality-Control-SQC-using-R-</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/RohitDhankar/Statistical-Quality-Control-SQC-using-R-/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/RohitDhankar/Statistical-Quality-Control-SQC-using-R-/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/RohitDhankar/Statistical-Quality-Control-SQC-using-R-">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a id="-rohit--githubstatistical-quality-control-sqc-using-r" class="anchor" href="#-rohit--githubstatistical-quality-control-sqc-using-r" aria-hidden="true"><span class="octicon octicon-link"></span></a> Rohit <a href="https://github.com/RohitDhankar"> GitHub</a>
+<br>
+Statistical Quality Control (SQC) using "R"
+<br>
+</h1>
+
+<p>
+
+<br>
+1. 99.73% observations to be between +(-)3 Sigma / Six Sigma . 
+<br>
+2. Control Charts - UCL , Central Line and LCL , leads to outlier or Special cause detection.
+<br>
+3. Using package - "qcc" to create a Control Chart within "R"
+<br>
+4. Multivariate Control Charts - Control Ellipsoid - http://arxiv.org/ftp/arxiv/papers/0901/0901.2880.pdf
+<br>
+
+Copyright is of the Authors
+Authors:  Edgar Santos-Fernández, Michele Scagliarini -- https://sites.google.com/site/edgarsantosfernandez/home
+</p>
+
+<div class="highlight highlight-source-r"><pre>
+library(<span class="pl-smi">MSQC</span>)
+library(<span class="pl-s"><span class="pl-pds">"</span>MSQC<span class="pl-pds">"</span></span>, <span class="pl-v">lib.loc</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>~/R/win-library/3.1<span class="pl-pds">"</span></span>)
+data(<span class="pl-v">package</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>MSQC<span class="pl-pds">"</span></span>)
+library(<span class="pl-smi">qcc</span>)
+citation(<span class="pl-s"><span class="pl-pds">"</span>qcc<span class="pl-pds">"</span></span>)
+<span class="pl-c">#Scrucca, L. (2004). qcc: an R package for quality control</span>
+<span class="pl-c">#charting and statistical process control. R News 4/1, 11-17.</span>
+set.seed(<span class="pl-c1">20</span>)
+
+<span class="pl-smi">x</span> <span class="pl-k">&lt;-</span>round(rnorm(<span class="pl-c1">120</span>,<span class="pl-c1">20</span>,<span class="pl-c1">2</span>),<span class="pl-c1">2</span>)
+<span class="pl-smi">length</span> <span class="pl-k">&lt;-</span><span class="pl-k">matrix</span>(<span class="pl-smi">x</span>, <span class="pl-v">ncol</span><span class="pl-k">=</span><span class="pl-c1">4</span>, <span class="pl-v">byrow</span><span class="pl-k">=</span><span class="pl-c1">TRUE</span>)
+par(<span class="pl-v">mfrow</span><span class="pl-k">=</span>c(<span class="pl-c1">1</span>,<span class="pl-c1">2</span>))
+qcc(<span class="pl-smi">length</span>, <span class="pl-v">type</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>xbar<span class="pl-pds">"</span></span>, <span class="pl-v">std.dev</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>RMSDF<span class="pl-pds">"</span></span>); qcc(<span class="pl-smi">length</span>, <span class="pl-v">type</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>R<span class="pl-pds">"</span></span>)
+<span class="pl-c">#</span>
+<span class="pl-smi">cap</span><span class="pl-k">&lt;-</span>qcc(<span class="pl-smi">length</span>, <span class="pl-v">type</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>xbar<span class="pl-pds">"</span></span>, <span class="pl-v">nsigmas</span><span class="pl-k">=</span><span class="pl-c1">3</span>, <span class="pl-v">plot</span><span class="pl-k">=</span><span class="pl-c1">T</span>)
+process.capability(<span class="pl-smi">cap</span>, <span class="pl-v">spec.limits</span><span class="pl-k">=</span>c(<span class="pl-c1">14</span>,<span class="pl-c1">26</span>))
+<span class="pl-c">#</span>
+
+<span class="pl-smi">mu</span> <span class="pl-k">&lt;-</span>c(<span class="pl-c1">0</span>,<span class="pl-c1">0</span>) <span class="pl-c"># The Mean vector - "mu" of a Bivariate Normal Distribution </span>
+<span class="pl-smi">sigma</span> <span class="pl-k">&lt;-</span> <span class="pl-k">matrix</span>(c(<span class="pl-c1">10</span>,<span class="pl-c1">3</span>,<span class="pl-c1">3</span>,<span class="pl-c1">6</span>),<span class="pl-c1">2</span>,<span class="pl-c1">2</span>) <span class="pl-c"># Sigma the Covariance Matrix </span>
+<span class="pl-c"># The Square Covariance Matrix structure needs to be seen and understood ... </span>
+<span class="pl-smi">sigma</span>
+<span class="pl-c">#</span>
+<span class="pl-smi">sigma</span>[<span class="pl-c1">1</span>,<span class="pl-c1">1</span>]
+<span class="pl-c"># Which is the Observation "10" t location - Row - 1 and Column -1, within the Square Matrix "sigma"</span>
+<span class="pl-smi">sigma</span>[<span class="pl-c1">2</span>,<span class="pl-c1">2</span>]
+<span class="pl-c"># Which is the Observation "6" at location - Row - 2 and Column -2 , within the Square Matrix "sigma"</span>
+<span class="pl-c">#</span>
+<span class="pl-smi">rho</span> <span class="pl-k">&lt;-</span> <span class="pl-smi">sigma</span>[<span class="pl-c1">1</span>,<span class="pl-c1">2</span>]<span class="pl-k">/</span>(sqrt(<span class="pl-smi">sigma</span>[<span class="pl-c1">1</span>,<span class="pl-c1">1</span>]<span class="pl-k">*</span><span class="pl-smi">sigma</span>[<span class="pl-c1">2</span>,<span class="pl-c1">2</span>])) 
+<span class="pl-smi">rho</span>
+<span class="pl-c"># rho=3/(sqrt(10*6))</span>
+<span class="pl-c"># dummy&lt;-3/sqrt(60) - same as value of "rho"</span>
+<span class="pl-c"># https://stat.ethz.ch/R-manual/R-devel/library/stats/html/cor.html</span>
+<span class="pl-c">#</span>
+<span class="pl-smi">var1</span><span class="pl-k">&lt;-</span>seq(<span class="pl-k">-</span><span class="pl-c1">12</span>,<span class="pl-c1">12</span>,.<span class="pl-c1">7</span>)
+<span class="pl-smi">var1</span>
+<span class="pl-c">#</span>
+<span class="pl-smi">var2</span><span class="pl-k">&lt;-</span><span class="pl-smi">var1</span>
+<span class="pl-e">knitr</span><span class="pl-k">::</span>kable(<span class="pl-smi">var2</span>)</pre></div>
+
+<div class="highlight highlight-source-r"><pre></pre></div>
+
+<div class="highlight highlight-source-r"><pre><span class="pl-c"># </span>
+<span class="pl-smi">f</span><span class="pl-k">&lt;-</span><span class="pl-k">matrix</span>(<span class="pl-c1">0</span>, length(<span class="pl-smi">var1</span>), length(<span class="pl-smi">var1</span>))
+<span class="pl-k">for</span>(<span class="pl-smi">i</span> <span class="pl-k">in</span> <span class="pl-c1">1</span><span class="pl-k">:</span>length(<span class="pl-smi">var1</span>))
+  {
+<span class="pl-k">for</span>(<span class="pl-smi">j</span> <span class="pl-k">in</span> <span class="pl-c1">1</span><span class="pl-k">:</span>length(<span class="pl-smi">var1</span>))
+  {
+  <span class="pl-smi">f</span>[<span class="pl-smi">i</span>,<span class="pl-smi">j</span>]<span class="pl-k">&lt;-</span><span class="pl-c1">1</span><span class="pl-k">/</span>(<span class="pl-c1">2</span><span class="pl-k">*</span><span class="pl-c1">pi</span><span class="pl-k">*</span>sqrt(<span class="pl-smi">sigma</span>[<span class="pl-c1">1</span>,<span class="pl-c1">1</span>]<span class="pl-k">*</span><span class="pl-smi">sigma</span>[<span class="pl-c1">2</span>,<span class="pl-c1">2</span>]<span class="pl-k">*</span>(<span class="pl-c1">1</span><span class="pl-k">-</span><span class="pl-smi">rho</span><span class="pl-k">^</span><span class="pl-c1">2</span>)))<span class="pl-k">*</span>exp(<span class="pl-k">-</span><span class="pl-c1">1</span><span class="pl-k">/</span>(<span class="pl-c1">2</span><span class="pl-k">*</span>(<span class="pl-c1">1</span><span class="pl-k">-</span><span class="pl-smi">rho</span><span class="pl-k">^</span><span class="pl-c1">2</span>)) <span class="pl-k">*</span> ((<span class="pl-smi">var1</span>[<span class="pl-smi">i</span>]<span class="pl-k">-</span><span class="pl-smi">mu</span>[<span class="pl-c1">1</span>])<span class="pl-k">^</span><span class="pl-c1">2</span><span class="pl-k">/</span><span class="pl-smi">sigma</span>[<span class="pl-c1">1</span>,<span class="pl-c1">1</span>] <span class="pl-k">+</span> (<span class="pl-smi">var2</span>[<span class="pl-smi">j</span>] <span class="pl-k">-</span> <span class="pl-smi">mu</span>[<span class="pl-c1">2</span>])<span class="pl-k">^</span><span class="pl-c1">2</span><span class="pl-k">/</span><span class="pl-smi">sigma</span>[<span class="pl-c1">2</span>,<span class="pl-c1">2</span>]<span class="pl-k">-</span><span class="pl-c1">2</span> <span class="pl-k">*</span><span class="pl-smi">rho</span><span class="pl-k">*</span>((<span class="pl-smi">var1</span>[<span class="pl-smi">i</span>] <span class="pl-k">-</span> <span class="pl-smi">mu</span>[<span class="pl-c1">1</span>])<span class="pl-k">*</span>(<span class="pl-smi">var2</span>[<span class="pl-smi">j</span>]<span class="pl-k">-</span><span class="pl-smi">mu</span>[<span class="pl-c1">2</span>]))<span class="pl-k">/</span>(sqrt(<span class="pl-smi">sigma</span>[<span class="pl-c1">1</span>,<span class="pl-c1">1</span>])<span class="pl-k">*</span>sqrt(<span class="pl-smi">sigma</span>[<span class="pl-c1">2</span>,<span class="pl-c1">2</span>]))))}}    
+
+<span class="pl-c"># </span>
+str(<span class="pl-smi">f</span>)
+<span class="pl-c">#</span>
+persp(<span class="pl-smi">var1</span>,<span class="pl-smi">var2</span>,<span class="pl-smi">f</span>,<span class="pl-v">xlab</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>Var-1<span class="pl-pds">"</span></span>,<span class="pl-v">ylab</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>Var-2<span class="pl-pds">"</span></span>,<span class="pl-v">zlab</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>f(var1,var2)<span class="pl-pds">"</span></span>, 
+      <span class="pl-v">theta</span><span class="pl-k">=</span><span class="pl-c1">30</span>,<span class="pl-v">phi</span><span class="pl-k">=</span><span class="pl-c1">30</span>,<span class="pl-v">col</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>red<span class="pl-pds">"</span></span>,<span class="pl-v">shade</span> <span class="pl-k">=</span> <span class="pl-c1">0.05</span>,<span class="pl-v">r</span><span class="pl-k">=</span><span class="pl-c1">50</span>,<span class="pl-v">d</span><span class="pl-k">=</span><span class="pl-c1">0.02</span>,<span class="pl-v">expand</span><span class="pl-k">=</span><span class="pl-c1">0.9</span>,<span class="pl-v">ltheta</span><span class="pl-k">=</span><span class="pl-c1">90</span>,<span class="pl-v">lphi</span><span class="pl-k">=</span><span class="pl-c1">180</span>, <span class="pl-v">nticks</span><span class="pl-k">=</span><span class="pl-c1">4</span>,<span class="pl-v">box</span><span class="pl-k">=</span><span class="pl-c1">F</span>)
+<span class="pl-c">#</span>
+<span class="pl-smi">jet.colors</span> <span class="pl-k">&lt;-</span> colorRampPalette( c(<span class="pl-s"><span class="pl-pds">"</span>blue<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>green<span class="pl-pds">"</span></span>) )
+<span class="pl-c">#</span>
+<span class="pl-smi">nbcol</span> <span class="pl-k">&lt;-</span> <span class="pl-c1">100</span>
+<span class="pl-smi">color</span> <span class="pl-k">&lt;-</span> jet.colors(<span class="pl-smi">nbcol</span>)
+persp(<span class="pl-smi">var1</span>,<span class="pl-smi">var2</span>,<span class="pl-smi">f</span>,<span class="pl-v">xlab</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>Var-1<span class="pl-pds">"</span></span>,<span class="pl-v">ylab</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>Var-2<span class="pl-pds">"</span></span>,<span class="pl-v">zlab</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>f(var1,var2)<span class="pl-pds">"</span></span>, 
+      <span class="pl-v">theta</span><span class="pl-k">=</span><span class="pl-c1">30</span>,<span class="pl-v">phi</span><span class="pl-k">=</span><span class="pl-c1">30</span>,<span class="pl-v">col</span> <span class="pl-k">=</span> <span class="pl-smi">color</span>,<span class="pl-v">shade</span> <span class="pl-k">=</span> <span class="pl-c1">0.05</span>,<span class="pl-v">r</span><span class="pl-k">=</span><span class="pl-c1">50</span>,<span class="pl-v">d</span><span class="pl-k">=</span><span class="pl-c1">0.02</span>,<span class="pl-v">expand</span><span class="pl-k">=</span><span class="pl-c1">0.9</span>,<span class="pl-v">ltheta</span><span class="pl-k">=</span><span class="pl-c1">90</span>,<span class="pl-v">lphi</span><span class="pl-k">=</span><span class="pl-c1">180</span>, <span class="pl-v">nticks</span><span class="pl-k">=</span><span class="pl-c1">4</span>,<span class="pl-v">box</span><span class="pl-k">=</span><span class="pl-c1">T</span>)
+<span class="pl-c"># Further Shading - using Code from help -persp {graphics}</span>
+<span class="pl-smi">z</span> <span class="pl-k">&lt;-</span> outer(<span class="pl-smi">var1</span>, <span class="pl-smi">var2</span>, <span class="pl-k">function</span>(<span class="pl-smi">a</span>, <span class="pl-smi">b</span>) <span class="pl-smi">a</span><span class="pl-k">*</span><span class="pl-smi">b</span><span class="pl-k">^</span><span class="pl-c1">2</span>)
+<span class="pl-smi">nrz</span> <span class="pl-k">&lt;-</span> nrow(<span class="pl-smi">z</span>)
+<span class="pl-smi">ncz</span> <span class="pl-k">&lt;-</span> ncol(<span class="pl-smi">z</span>)
+<span class="pl-c"># Compute the z-value at the facet centres</span>
+<span class="pl-smi">zfacet</span> <span class="pl-k">&lt;-</span> <span class="pl-smi">z</span>[<span class="pl-k">-</span><span class="pl-c1">1</span>, <span class="pl-k">-</span><span class="pl-c1">1</span>] <span class="pl-k">+</span> <span class="pl-smi">z</span>[<span class="pl-k">-</span><span class="pl-c1">1</span>, <span class="pl-k">-</span><span class="pl-smi">ncz</span>] <span class="pl-k">+</span> <span class="pl-smi">z</span>[<span class="pl-k">-</span><span class="pl-smi">nrz</span>, <span class="pl-k">-</span><span class="pl-c1">1</span>] <span class="pl-k">+</span> <span class="pl-smi">z</span>[<span class="pl-k">-</span><span class="pl-smi">nrz</span>, <span class="pl-k">-</span><span class="pl-smi">ncz</span>]
+<span class="pl-c"># Recode facet z-values into color indices</span>
+<span class="pl-smi">facetcol</span> <span class="pl-k">&lt;-</span> cut(<span class="pl-smi">zfacet</span>, <span class="pl-smi">nbcol</span>)
+
+persp(<span class="pl-smi">var1</span>,<span class="pl-smi">var2</span>,<span class="pl-smi">f</span>,<span class="pl-v">xlab</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>Var-1<span class="pl-pds">"</span></span>,<span class="pl-v">ylab</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>Var-2<span class="pl-pds">"</span></span>,<span class="pl-v">zlab</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>f(var1,var2)<span class="pl-pds">"</span></span>, 
+      <span class="pl-v">theta</span><span class="pl-k">=</span><span class="pl-c1">30</span>,<span class="pl-v">phi</span><span class="pl-k">=</span><span class="pl-c1">30</span>,<span class="pl-v">col</span> <span class="pl-k">=</span> <span class="pl-smi">color</span>[<span class="pl-smi">facetcol</span>],<span class="pl-v">shade</span> <span class="pl-k">=</span> <span class="pl-c1">0.05</span>,<span class="pl-v">r</span><span class="pl-k">=</span><span class="pl-c1">50</span>,<span class="pl-v">d</span><span class="pl-k">=</span><span class="pl-c1">0.02</span>,<span class="pl-v">expand</span><span class="pl-k">=</span><span class="pl-c1">0.9</span>,<span class="pl-v">ltheta</span><span class="pl-k">=</span><span class="pl-c1">90</span>,<span class="pl-v">lphi</span><span class="pl-k">=</span><span class="pl-c1">180</span>, <span class="pl-v">nticks</span><span class="pl-k">=</span><span class="pl-c1">4</span>,<span class="pl-v">box</span><span class="pl-k">=</span><span class="pl-c1">F</span>)
+<span class="pl-c"># In the Above seen Perspective Plot - persp {graphics}</span>
+<span class="pl-c"># f == the matrix containing values to be plotted.</span>
+</pre></div>
+
+<div class="highlight highlight-source-r"><pre><span class="pl-c"># R Graphs </span>
+</pre></div>
+
+<p><br></p>
+
+<h2>
+<a id="contact" class="anchor" href="#contact" aria-hidden="true"><span class="octicon octicon-link"></span></a>Contact...</h2>
+
+<ul>
+<li><a href="https://github.com/RohitDhankar"> email</a></li>
+<li><a href="https://github.com/RohitDhankar"> Github </a></li>
+<li><a href="https://www.linkedin.com/in/rohitdhankar"> LinkedIn </a></li>
+<li><a href="https://twitter.com/DhankarRohit"> Twitter  </a></li>
+</ul>
+
+<p><br></p>
+
+<h2>
+<a id="license---gpl---no-copyright-httpwwwgnuorglicenseslicensesenhtmlgpl" class="anchor" href="#license---gpl---no-copyright-httpwwwgnuorglicenseslicensesenhtmlgpl" aria-hidden="true"><span class="octicon octicon-link"></span></a>License - GPL - No Copyright (<a href="http://www.gnu.org/licenses/licenses.en.html#GPL">http://www.gnu.org/licenses/licenses.en.html#GPL</a>)</h2>
+
+<pre><code>
+</code></pre>
+
+<p><a href="https://github.com/RohitDhankar"> Rohit Dhankar 2015</a></p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/RohitDhankar">RohitDhankar</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
